@@ -10,16 +10,20 @@ app.use(express.urlencoded({extended:true}))
 app.use(fileUpload())
 
 
-app.post('express-fileuploaded',(req,res,next)=>{
-  const file = req.files.file
-  const filename = file.name
-  const size = file.data.length
-})
-
-
-
-
+app.post('/upload',(req,res,next)=>{
   
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return res.status(400).send('No files were uploaded.')}
+})
+let sampleFile = req.files.sampleFile
+let uploadPath = __dirname + '/public/upload' + sampleFile.name
+
+sampleFile.mv(uploadPath , (req,res,next)=>{
+  if(err){
+    return res.status(400).send(err)
+  }
+  return res.status(200).json({message:"file uploaded"})
+})
 
 
 
